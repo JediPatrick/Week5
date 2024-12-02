@@ -1,7 +1,12 @@
 **/.venv/
+**/.env/
 **/*.csv
 __pycache__/
 *.py[cod]
 *$py.class
 Week4/Data_set.txt
 Week5/files/
+/env
+/customer_data
+/files
+/.vs
