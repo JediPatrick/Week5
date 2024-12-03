@@ -7,7 +7,6 @@ class Downloader(object):
     #uses a url link and a destination to download a file. Optionally one can use an alt url if applicaple
     #Returns success is file got downlaoded
     def download_handling(self, url : str, destination_path : str, alt_url : Optional[str] = None) -> bool:
-
         success = False
         if not url and not alt_url:
             return success
@@ -20,9 +19,10 @@ class Downloader(object):
         
         #Sace file to the distination if the download was success
         if fileDownloaded:
-            success = self.save_to_file(destination_path,response)
+            success = self.save_to_file(destination_path, response)
        
         return success
+
 
     def save_to_file(self, destination_path : str, response):
          with open(destination_path, "wb") as file:
@@ -31,6 +31,7 @@ class Downloader(object):
                 return True
             except:
                 return False
+
 
     def download(self, url : str):
         try:
@@ -42,6 +43,6 @@ class Downloader(object):
         except:
             return False, None 
 
+
 if __name__ == "__main__":
     downloader = Downloader()
-    downloader.download_handling("http://arpeissig.at/wp-content/uploads/2016/02/D7_NHB_ARP_Final_2.pdf", "test.pdf")
