@@ -54,7 +54,7 @@ class FileHandler(object):
         #Tries reading the files listed as not downloaded
         if os.path.exists(self.meta_file):
                 meta_data = pl.read_excel(self.meta_file, columns = [self.ID,"pdf_downloaded"])
-                meta_data=meta_data.filter(pl.col("pdf_downloaded") == "no")
+                meta_data=meta_data.filter(pl.col("pdf_downloaded") == "yes")
             #Sort out files that are downloaded
                 file_data = file_data.join(meta_data,on=self.ID, how="anti")
         
