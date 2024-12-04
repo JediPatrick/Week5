@@ -1,2 +1,2 @@
 [tool.black]
-line-length = 140  # Set the maximum line length to 120 characters (or whatever you prefer)
+line-length = 180  # Set the maximum line length to 180 characters (or whatever you prefer)

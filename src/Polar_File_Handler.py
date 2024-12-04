@@ -12,13 +12,7 @@ from xlsxwriter import Workbook
 class FileHandler(object):
 
     # Creates an instance of the filehandler with a dictionary of successfull downloads
-    def __init__(
-        self,
-        url_file: str,
-        meta_file: str,
-        destination: str,
-        number_of_threads: Optional[int] = 10,
-    ) -> None:
+    def __init__(self, url_file: str, meta_file: str, destination: str, number_of_threads: Optional[int] = 10,) -> None:
         self.number_of_threads = number_of_threads
         self.url_file = url_file
         self.meta_file = meta_file
@@ -44,8 +38,6 @@ class FileHandler(object):
                 destination_path=os.path.join(destination, name + ".pdf"),
                 alt_url=alt_link,
             )
-
-            # Dictionaries are not necesarily thread safe but appending to it is so this is fine. If more complicated tasks where needed you would use a mutex lock etc
 
             if downloaded:
                 state = "yes"
