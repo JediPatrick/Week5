@@ -21,9 +21,7 @@ class Controller(object):
     # Runs the filehandler
     def run(self):
 
-        file_handler = FileHandler(
-            self.url_file_name, self.report_file_name, self.destination, 1
-        )
+        file_handler = FileHandler(self.url_file_name, self.report_file_name, self.destination, 1)
         file_handler.handler()
 
 

@@ -23,12 +23,8 @@ class TestSaveToFile(unittest.TestCase):
             sut = downloader.save_to_file("mock_path.txt", mock_response)
 
             # Assert
-            mocked_file.assert_called_once_with(
-                "mock_path.txt", "wb"
-            )  # Check that open was called correctly
-            mocked_file().write.assert_called_once_with(
-                b"Mock file content"
-            )  # Check that write was called with correct content
+            mocked_file.assert_called_once_with("mock_path.txt", "wb")  # Check that open was called correctly
+            mocked_file().write.assert_called_once_with(b"Mock file content")  # Check that write was called with correct content
             self.assertTrue(sut)
 
     def test_save_to_file_failure(self):
@@ -40,9 +36,7 @@ class TestSaveToFile(unittest.TestCase):
         # Mock the open function and make write raise an exception
         with patch("builtins.open", mock_open()) as mocked_file:
             downloader = Downloader()
-            mocked_file().write.side_effect = IOError(
-                "Mocked error"
-            )  # Simulate write failure
+            mocked_file().write.side_effect = IOError("Mocked error")  # Simulate write failure
 
             # Act
             result = downloader.save_to_file("mock_path.txt", mock_response)
@@ -69,9 +63,7 @@ class TestDownloader(unittest.TestCase):
         # Assertions
         self.assertTrue(success)
         self.assertEqual(response, mock_response)
-        mock_get.assert_called_once_with(
-            "http://test.com/test.pdf", stream=True, timeout=30
-        )
+        mock_get.assert_called_once_with("http://test.com/test.pdf", stream=True, timeout=30)
 
     @patch("Downloader.requests.get")  # Mock requests.get
     def test_download_failure_non_pdf(self, mock_get):
@@ -88,9 +80,7 @@ class TestDownloader(unittest.TestCase):
         # Assertions
         self.assertFalse(success)
         self.assertIsNone(response)
-        mock_get.assert_called_once_with(
-            "http://test.com/test.html", stream=True, timeout=30
-        )
+        mock_get.assert_called_once_with("http://test.com/test.html", stream=True, timeout=30)
 
     @patch("Downloader.requests.get")  # Mock requests.get
     def test_download_failure_exception(self, mock_get):
@@ -104,17 +94,13 @@ class TestDownloader(unittest.TestCase):
         # Assertions
         self.assertFalse(success)
         self.assertIsNone(response)
-        mock_get.assert_called_once_with(
-            "http://test.com/test.pdf", stream=True, timeout=30
-        )
+        mock_get.assert_called_once_with("http://test.com/test.pdf", stream=True, timeout=30)
 
 
 class TestDownloadHandling(unittest.TestCase):
 
     @patch.object(Downloader, "download")  # Mock the 'download' method of Downloader
-    @patch.object(
-        Downloader, "save_to_file"
-    )  # Mock the 'save_to_file' method of Downloader
+    @patch.object(Downloader, "save_to_file")  # Mock the 'save_to_file' method of Downloader
     def test_download_handling_success_main_url(self, mock_save_to_file, mock_download):
         # Arrange
         url = "http://main-url.com/file.pdf"
@@ -135,15 +121,11 @@ class TestDownloadHandling(unittest.TestCase):
 
         # Assert
         self.assertTrue(result)
-        mock_download.assert_called_once_with(
-            url
-        )  # Check that download was called with the main URL
+        mock_download.assert_called_once_with(url)  # Check that download was called with the main URL
         mock_save_to_file.assert_called_once_with(destination_path, mock_response)
 
     @patch.object(Downloader, "download")  # Mock the 'download' method of Downloader
-    @patch.object(
-        Downloader, "save_to_file"
-    )  # Mock the 'save_to_file' method of Downloader
+    @patch.object(Downloader, "save_to_file")  # Mock the 'save_to_file' method of Downloader
     def test_download_handling_success_alt_url(self, mock_save_to_file, mock_download):
         # Arrange
         url = "http://main-url.com/file.pdf"
@@ -164,21 +146,13 @@ class TestDownloadHandling(unittest.TestCase):
 
         # Assert
         self.assertTrue(result)
-        mock_download.assert_any_call(
-            url
-        )  # Check that download was called with the main URL first
-        mock_download.assert_any_call(
-            alt_url
-        )  # Check that download was called with the alt URL
+        mock_download.assert_any_call(url)  # Check that download was called with the main URL first
+        mock_download.assert_any_call(alt_url)  # Check that download was called with the alt URL
         mock_save_to_file.assert_called_once_with(destination_path, mock_response)
 
     @patch.object(Downloader, "download")  # Mock the 'download' method of Downloader
-    @patch.object(
-        Downloader, "save_to_file"
-    )  # Mock the 'save_to_file' method of Downloader
-    def test_download_handling_no_url_or_alt_url(
-        self, mock_save_to_file, mock_download
-    ):
+    @patch.object(Downloader, "save_to_file")  # Mock the 'save_to_file' method of Downloader
+    def test_download_handling_no_url_or_alt_url(self, mock_save_to_file, mock_download):
         # Arrange
         url = None
         alt_url = None
@@ -194,9 +168,7 @@ class TestDownloadHandling(unittest.TestCase):
         mock_save_to_file.assert_not_called()  # save_to_file should not be called
 
     @patch.object(Downloader, "download")  # Mock the 'download' method of Downloader
-    @patch.object(
-        Downloader, "save_to_file"
-    )  # Mock the 'save_to_file' method of Downloader
+    @patch.object(Downloader, "save_to_file")  # Mock the 'save_to_file' method of Downloader
     def test_download_handling_save_failure(self, mock_save_to_file, mock_download):
         # Arrange
         url = "http://main-url.com/file.pdf"
@@ -217,9 +189,7 @@ class TestDownloadHandling(unittest.TestCase):
 
         # Assert
         self.assertFalse(result)  # Expecting False due to save failure
-        mock_download.assert_called_once_with(
-            url
-        )  # Check that download was called with the main URL
+        mock_download.assert_called_once_with(url)  # Check that download was called with the main URL
         mock_save_to_file.assert_called_once_with(destination_path, mock_response)
 
 

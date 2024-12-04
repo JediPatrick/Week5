@@ -7,9 +7,7 @@ class Downloader(object):
 
     # uses a url link and a destination to download a file. Optionally one can use an alt url if applicaple
     # Returns success is file got downlaoded
-    def download_handling(
-        self, url: str, destination_path: str, alt_url: Optional[str] = None
-    ) -> bool:
+    def download_handling(self, url: str, destination_path: str, alt_url: Optional[str] = None) -> bool:
         success = False
         if not url and not alt_url:
             return success

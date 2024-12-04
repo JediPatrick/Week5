@@ -55,17 +55,13 @@ class FileHandler(object):
             queue.task_done()
 
     def import_data_files(self):
-        file_data = pl.read_excel(
-            source=self.url_file, columns=["BRnum", "Pdf_URL", "Report Html Address"]
-        )
+        file_data = pl.read_excel(source=self.url_file, columns=["BRnum", "Pdf_URL", "Report Html Address"])
 
         # Initiates empty dataframe
         meta_data = pl.DataFrame()
         # Tries reading the files listed as not downloaded
         if os.path.exists(self.meta_file):
-            meta_data = pl.read_excel(
-                self.meta_file, columns=[self.ID, "pdf_downloaded"]
-            )
+            meta_data = pl.read_excel(self.meta_file, columns=[self.ID, "pdf_downloaded"])
             meta_data = meta_data.filter(pl.col("pdf_downloaded") == "yes")
             # Sort out files that are downloaded
             file_data = file_data.join(meta_data, on=self.ID, how="anti")
@@ -103,13 +99,9 @@ class FileHandler(object):
         if not file_data.is_empty():
             self.thread_handler(file_data)
             # Creates a dataframe from the dictionary of downloads
-            finished_data_frame = pl.DataFrame(
-                self.download_status_list, schema=[self.ID, "pdf_downloaded"]
-            )
+            finished_data_frame = pl.DataFrame(self.download_status_list, schema=[self.ID, "pdf_downloaded"])
 
             if not meta_data.is_empty():
-                finished_data_frame = pl.concat(
-                    [finished_data_frame, meta_data], rechunk=True
-                )
+                finished_data_frame = pl.concat([finished_data_frame, meta_data], rechunk=True)
             with Workbook(self.meta_file) as file:
                 finished_data_frame.write_excel(workbook=file)
