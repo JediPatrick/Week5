@@ -1,0 +1,57 @@
+name: Python CI Pipeline
+
+# Trigger the pipeline on push or pull requests to main branch
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest  # You can specify different runners, like macos or windows, depending on your needs
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'  # Specify the Python version you need
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Make sure your dependencies are listed in requirements.txt
+
+      # Run tests
+      - name: Run tests
+        run: |
+          pytest  # Assuming you are using pytest for testing
+
+      # (Optional) Upload test results as artifacts
+      - name: Upload test results
+        if: failure()  # Upload if tests fail
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: ./test-reports  # Path to the test report directory
+
+      # (Optional) Cache dependencies to speed up future workflows
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-cache-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-cache-
+
+      # (Optional) Notify if the tests fail (e.g., via email, Slack, etc.)
+      # - name: Notify on failure
+      #   uses: some-action-for-notification
