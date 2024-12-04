@@ -3,3 +3,4 @@ pandas
 polars
 fastexcel
 requests
+black
