@@ -30,10 +30,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt  # Make sure your dependencies are listed in requirements.txt
 
-      # Run tests
-      - name: Run tests
+      # Run tests with unittest
+      - name: Run unit tests
         run: |
-          pytest  # Assuming you are using pytest for testing
+          python -m unittest discover -s tests  # Discover and run tests in the 'tests' directory
 
       # (Optional) Upload test results as artifacts
       - name: Upload test results
@@ -52,6 +52,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-cache-
 
-      # (Optional) Notify if the tests fail (e.g., via email, Slack, etc.)
+      # (Optional) Notify on failure (e.g., via email, Slack, etc.)
       # - name: Notify on failure
       #   uses: some-action-for-notification
