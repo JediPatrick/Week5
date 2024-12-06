@@ -69,18 +69,18 @@ class FileHandler(object):
     def thread_handler(self, file_data):
         queue = Queue()
 
-    #    # counter to only download 20 files
-    #    j = 0
+        #    # counter to only download 20 files
+        #    j = 0
         # We thru each br number and starts a download
         for row in file_data.rows(named=True):
-    #        if j == 20:
-    #            break
+            #        if j == 20:
+            #            break
             alt_link = row["Report Html Address"]
             link = row["Pdf_URL"]
             index = row[self.ID]
             # Creates a new thread and adds them to the list so that we can make sure all downloads are done before exiting
             queue.put([link, self.destination, index, alt_link])
-    #        j += 1
+        #        j += 1
         # Makes sure each thread is done
         for i in range(self.number_of_threads):
             thread = threading.Thread(target=self.thread_downloader, args=(queue,))
