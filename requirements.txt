@@ -4,3 +4,5 @@ polars
 fastexcel
 requests
 black
+xlsxwriter
+typing
